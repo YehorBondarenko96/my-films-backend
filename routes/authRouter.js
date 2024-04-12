@@ -16,5 +16,7 @@ authRouter.delete("/:id", isValidId, authControllers.delUser);
 authRouter.get("/:id", authenticate, isValidId, authControllers.findUser);
 authRouter.put("/:id/played", authenticate, isValidId, authControllers.updatePlayed);
 authRouter.put("/:id/selected", authenticate, isValidId, authControllers.updateSelected);
+authRouter.put("/:id/favorite", authenticate, isValidId, authControllers.updateFavorite);
+
 
 export default authRouter;

@@ -36,6 +36,10 @@ const userSchema = new Schema({
         type: Array,
         required: []
     },
+    favorite: {
+        type: Array,
+        required: []
+    },
 }, { versionKey: false, timestamps: true });
 
 userSchema.post("save", handelSaveError);

@@ -94,6 +94,22 @@ const updateSelected = async (req, res) => {
     })
 };
 
+const updateFavorite = async (req, res) => {
+    const { id } = req.params;
+    const newFavorite = req.body;
+    const result = await authServices.updateUser({ _id: id }, { favorite: newFavorite });
+    if (!result) {
+        throw HttpError(404, "User not found")
+    }
+
+    res.status(201).json({
+        user: {
+            id: result._id,
+            favorite: result.favorite
+        }
+    })
+};
+
 const resendVerify = async (req, res) => {
     const { email } = req.body;
     const user = await authServices.findUser({ email });
@@ -170,7 +186,8 @@ const findUser = async (req, res) => {
             email: result.email,
             name: result.name,
             played: result.played,
-            selected: result.selected
+            selected: result.selected,
+            favorite: result.favorite
         }
     });
 };
@@ -193,5 +210,6 @@ export default {
     delUser: decForFn(delUser),
     findUser: decForFn(findUser),
     updatePlayed: decForFn(updatePlayed),
-    updateSelected: decForFn(updateSelected)
+    updateSelected: decForFn(updateSelected),
+    updateFavorite: decForFn(updateFavorite)
 }
