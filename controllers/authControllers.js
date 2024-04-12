@@ -15,6 +15,7 @@ const {JWT_SECRET, BASE_URL, BASE_URL_FRONT} = process.env;
 
 const signup = async (req, res) => {
     const { email } = req.body;
+    console.log('req.body: ', req.body);
     const user = await authServices.findUser({email});
     if (user) {
         throw HttpError(409, "Email is use");
@@ -59,6 +60,38 @@ const verify = async (req, res) => {
     await authServices.updateUser({ _id: user._id }, { verify: true, verificationToken: null, token });
 
     res.redirect(`${BASE_URL_FRONT}/films?token=${token}`)
+};
+
+const updatePlayed = async (req, res) => {
+    const { id } = req.params;
+    const newPlayed = req.body;
+    const result = await authServices.updateUser({ _id: id }, { played: newPlayed });
+    if (!result) {
+        throw HttpError(404, "User not found")
+    }
+
+    res.status(201).json({
+        user: {
+            id: result._id,
+            played: result.played
+        }
+    })
+};
+
+const updateSelected = async (req, res) => {
+    const { id } = req.params;
+    const newSelected = req.body;
+    const result = await authServices.updateUser({ _id: id }, { selected: newSelected });
+    if (!result) {
+        throw HttpError(404, "User not found")
+    }
+
+    res.status(201).json({
+        user: {
+            id: result._id,
+            selected: result.selected
+        }
+    })
 };
 
 const resendVerify = async (req, res) => {
@@ -114,15 +147,6 @@ const signin = async (req, res) => {
     })
 };
 
-const getCurrent = async (req, res) => {
-    const {email, subscription} = req.user;
-
-    res.json({
-        email,
-        subscription
-    });
-};
-
 const signout = async (req, res) => { 
     const { _id } = req.user;
 
@@ -133,9 +157,25 @@ const signout = async (req, res) => {
     })
 };
 
+const findUser = async (req, res) => {
+    const { id } = req.params;
+    const result = await authServices.findUser({ _id: id });
+    if (!result) {
+        throw HttpError(404);
+    }
+    res.status(201).json({
+        user: {
+            id: result._id,
+            email: result.email,
+            name: result.name,
+            played: result.played,
+            selected: result.selected
+        }
+    });
+};
+
 const delUser = async (req, res) => {
     const { id } = req.params;
-    const { email } = req.body;
     const result = await authServices.removeUser({ _id: id });
     if (!result) {
         throw HttpError(404);
@@ -148,7 +188,9 @@ export default {
     verify: decForFn(verify),
     resendVerify: decForFn(resendVerify),
     signin: decForFn(signin),
-    getCurrent: decForFn(getCurrent),
     signout: decForFn(signout),
-    delUser: decForFn(delUser)
+    delUser: decForFn(delUser),
+    findUser: decForFn(findUser),
+    updatePlayed: decForFn(updatePlayed),
+    updateSelected: decForFn(updateSelected)
 }

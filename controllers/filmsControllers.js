@@ -1,12 +1,9 @@
 import filmsService from "../services/filmsServices.js";
 import decForFn from "../decorators/decForFuncs.js";
 import HttpError from "../helpers/HttpError.js";
-import { createFilmSchema, updateFilmSchema, updateStatusFilmShema } from "../schemas/filmsSchemas.js";
+import { createFilmSchema, updateFilmSchema} from "../schemas/filmsSchemas.js";
 
 const getAllFilms = async (req, res) => {
-    const { _id: owner } = req.user;
-    // const { favorite } = req.query;
-    const filter = owner;
     const result = await filmsService.listFilms();
     
     res.json(result);
@@ -62,27 +59,10 @@ const updateFilm = async (req, res) => {
     res.status(200).json(result);
 };
 
-const updateStatusFilm = async (req, res) => {
-    const { error } = updateStatusFilmShema.validate(req.body);
-    if (error) {
-        throw HttpError(400, error.message);
-    }
-    const { id } = req.params;
-    console.log('id: ', id);
-    console.log(req.body);
-
-    const result = await filmsService.updateFilmS({_id: id}, req.body);
-    if (!result) {
-        throw HttpError(404);
-    }
-    res.status(200).json(result);
-};
-
 export default {
     getAllFilms: decForFn(getAllFilms),
     getOneFilm: decForFn(getOneFilm),
     deleteFilm: decForFn(deleteFilm),
     createFilm: decForFn(createFilm),
-    updateFilm: decForFn(updateFilm),
-    updateStatusFilm: decForFn(updateStatusFilm)
+    updateFilm: decForFn(updateFilm)
 }

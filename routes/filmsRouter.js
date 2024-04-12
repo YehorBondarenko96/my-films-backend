@@ -17,6 +17,6 @@ filmsRouter.post("/", controllersFilms.createFilm);
 
 filmsRouter.put("/:id", isValidId, controllersFilms.updateFilm);
 
-filmsRouter.patch("/:id/favorite", isValidId, controllersFilms.updateStatusFilm);
+// filmsRouter.patch("/:id/favorite", isValidId, controllersFilms.updateStatusFilm);
 
 export default filmsRouter;

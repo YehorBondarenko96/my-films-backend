@@ -1,10 +1,12 @@
 import { Schema, model } from "mongoose";
 import { handelSaveError, setUpdateSettings } from "./hooks.js";
 import { emailRegexp } from "../constants/user-const.js";
-// import { type } from "express/lib/response.js";
 
 
 const userSchema = new Schema({
+    name: {
+        type: String
+    },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -25,7 +27,15 @@ const userSchema = new Schema({
     },
     verificationToken: {
         type: String,
-    }
+    },
+    played: {
+        type: Array,
+        required: []
+    },
+    selected: {
+        type: Array,
+        required: []
+    },
 }, { versionKey: false, timestamps: true });
 
 userSchema.post("save", handelSaveError);

@@ -11,8 +11,10 @@ authRouter.post("/register", validateBody(userSignupSchem), authControllers.sign
 authRouter.get("/verify/:verificationToken", authControllers.verify);
 authRouter.post("/verify", validateBody(userEmailSchem), authControllers.resendVerify);
 authRouter.post("/login", validateBody(userSigninSchem), authControllers.signin);
-authRouter.get("/current", authenticate, authControllers.getCurrent);
 authRouter.post("/logout", authenticate, authControllers.signout);
 authRouter.delete("/:id", isValidId, authControllers.delUser);
+authRouter.get("/:id", authenticate, isValidId, authControllers.findUser);
+authRouter.put("/:id/played", authenticate, isValidId, authControllers.updatePlayed);
+authRouter.put("/:id/selected", authenticate, isValidId, authControllers.updateSelected);
 
 export default authRouter;

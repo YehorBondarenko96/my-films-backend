@@ -32,14 +32,6 @@ const filmSchema = new Schema({
     image: {
     type: String
     },
-    favorite: {
-        type: Boolean,
-        default: false,
-    },
-    owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-    },
 }, { versionKey: false, timestamps: true });
 
 filmSchema.post("save", handelSaveError);
