@@ -15,7 +15,6 @@ const {JWT_SECRET, BASE_URL, BASE_URL_FRONT} = process.env;
 
 const signup = async (req, res) => {
     const { email } = req.body;
-    console.log('req.body: ', req.body);
     const user = await authServices.findUser({email});
     if (user) {
         throw HttpError(409, "Email is use");
