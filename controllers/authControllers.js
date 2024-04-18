@@ -197,11 +197,17 @@ const findUser = async (req, res) => {
 
 const delUser = async (req, res) => {
     const { id } = req.params;
-    const result = await authServices.removeUser({ _id: id });
+    const user = await authServices.findUser({ _id: id }); 
+    if (!user) {
+        throw HttpError(404);
+    }
+    if (!user.verify) {
+        const result = await authServices.removeUser({ _id: id });
     if (!result) {
         throw HttpError(404);
     }
     res.json(result);
+    }
 };
 
 export default {
