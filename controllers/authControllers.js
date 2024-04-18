@@ -122,7 +122,7 @@ const resendVerify = async (req, res) => {
     const verifyEmailData = {
         to: email,
         subject: "Please, verify your email",
-        html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}" turget="_blank">
+        html: `<a href="${BASE_URL}/api/users/verify/${user.verificationToken}" turget="_blank">
         <button 
         style="border-radius: 10px; border: 1px solid transparent; background-color: #474746; color: #ffffff;"
         >Press to continue using MyFilms</button>
