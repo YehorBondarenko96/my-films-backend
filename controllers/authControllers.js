@@ -141,10 +141,22 @@ const resendVerify = async (req, res) => {
     const verifyEmailData = {
         to: email,
         subject: "Please, verify your email",
-        html: `<a href="${BASE_URL}/api/users/verify/${user.verificationToken}" turget="_blank">
-        <button 
-        style="border-radius: 10px; border: 1px solid transparent; background-color: #474746; color: #ffffff;"
-        >Press to continue using MyFilms</button>
+        html: `<a
+          href="${BASE_URL}/api/users/verify/${user.verificationToken}"
+          target="_blank"
+          style="
+          border-radius: 10px; 
+          border: 1px solid transparent; 
+          background-color: #474746;
+          padding: 10px 20px;
+          color: #ffffff; 
+          text-decoration: none; 
+          display: inline-block; 
+          font-family: Arial, sans-serif; 
+          font-size: 16px; 
+          line-height: 24px;"
+        >
+          Press to continue using MyFilms
         </a>`
     };
 
