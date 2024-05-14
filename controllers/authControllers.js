@@ -17,7 +17,14 @@ const signup = async (req, res) => {
     const { email } = req.body;
     const user = await authServices.findUser({email});
     if (user) {
-        throw HttpError(409, "Email is use");
+        if (!user.verify) {
+        const result = await authServices.removeUser({email});
+    if (!result) {
+        throw HttpError(404);
+    }
+        } else {
+            throw HttpError(409, "Email is use");
+    }
     }
 
     const verificationToken = nanoid();
@@ -27,10 +34,22 @@ const signup = async (req, res) => {
     const verifyEmailData = {
         to: email,
         subject: "Please, verify your email",
-        html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}" turget="_blank">
-        <button 
-        style="border-radius: 10px; border: 1px solid transparent; background-color: #474746; color: #ffffff;"
-        >Press to continue using MyFilms</button>
+        html: `<a
+          href="${BASE_URL}/api/users/verify/${verificationToken}"
+          target="_blank"
+          style="
+          border-radius: 10px; 
+          border: 1px solid transparent; 
+          background-color: #474746;
+          padding: 10px 20px;
+          color: #ffffff; 
+          text-decoration: none; 
+          display: inline-block; 
+          font-family: Arial, sans-serif; 
+          font-size: 16px; 
+          line-height: 24px;"
+        >
+          Press to continue using MyFilms
         </a>`
     };
 
@@ -216,7 +235,6 @@ export default {
     resendVerify: decForFn(resendVerify),
     signin: decForFn(signin),
     signout: decForFn(signout),
-    delUser: decForFn(delUser),
     findUser: decForFn(findUser),
     updatePlayed: decForFn(updatePlayed),
     updateSelected: decForFn(updateSelected),
